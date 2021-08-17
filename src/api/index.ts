@@ -3,7 +3,7 @@ import { Coordinates } from '../components/Map/Map';
 
 const url = 'https://travel-advisor.p.rapidapi.com/restaurants/list-in-boundary'
 
-export const getPlacesData = async (sw: any, ne: any) => {
+export const getPlacesData = async (sw: Coordinates, ne: Coordinates) => {
     try {
         const { data: { data } } = await axios.get(url, {
             method: 'GET',

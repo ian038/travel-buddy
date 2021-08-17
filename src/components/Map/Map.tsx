@@ -7,12 +7,12 @@ import Rating from '@material-ui/lab/Rating';
 import useStyles from './styles';
 
 export type Coordinates = {
-    lat: number,
+    lat: number
     lng: number
 }
 
 export type Bounds = {
-    ne: Coordinates,
+    ne: Coordinates
     sw: Coordinates
 }
 

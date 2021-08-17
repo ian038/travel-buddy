@@ -34,7 +34,7 @@ const List: React.FC<PlacesProps> = ({ places }) => {
                 </Select>
             </FormControl>
             <Grid container spacing={3} className={classes.list}>
-                {places?.map((place: any, i: React.Key | null | undefined) => (
+                {places?.map((place: any, i: React.Key) => (
                     <Grid item key={i} xs={12} >
                         <Place place={place} />
                     </Grid>
