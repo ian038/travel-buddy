@@ -1,4 +1,5 @@
 import React from 'react';
+import { CssBaseline, Grid } from '@material-ui/core'
 import Header from './components/Header/Header'
 import List from './components/List/List'
 import Map from './components/Map/Map'
@@ -6,15 +7,16 @@ import Map from './components/Map/Map'
 const App: React.FC = () => {
   return (
     <>
+      <CssBaseline />
       <Header />
-      <div className='grid grid-cols-3 mx-4 my-8 text-xl container w-full'>
-        <div className='xs:gap-12 md:gap-4'>
+      <Grid container spacing={3} style={{ width: '100%' }}>
+        <Grid item xs={12} md={4}>
           <List />
-        </div>
-        <div className='xs:gap-12 md:gap-8'>
+        </Grid>
+        <Grid item xs={12} md={8} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Map />
-        </div>
-      </div>
+        </Grid>
+      </Grid>
     </>
   );
 }
