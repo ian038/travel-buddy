@@ -1,8 +1,14 @@
 import React from 'react'
 
-const Place: React.FC = () => {
+type PlaceProps = {
+    place: {
+        name: string
+    }
+}
+
+const Place: React.FC<PlaceProps> = ({ place }) => {
     return (
-        <h1>Place</h1>
+        <h1>{place.name}</h1>
     )
 }
 
