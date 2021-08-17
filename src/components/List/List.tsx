@@ -3,16 +3,15 @@ import { CircularProgress, Grid, Typography, InputLabel, MenuItem, FormControl, 
 import Place from '../Place/Place'
 import useStyles from './styles';
 
-const List: React.FC = () => {
+type PlacesProps = {
+    places: any
+}
+
+const List: React.FC<PlacesProps> = ({ places }) => {
+    console.log(places)
     const classes = useStyles()
     const [type, setType] = useState<string | unknown>('attractions')
     const [rating, setRating] = useState<number | unknown>(0)
-
-    const places = [
-        { name: 'Best Attractions' },
-        { name: 'Best Food' },
-        { name: 'Best Hotels' }
-    ]
 
     return (
         <div className={classes.container}>
@@ -35,10 +34,8 @@ const List: React.FC = () => {
                 </Select>
             </FormControl>
             <Grid container spacing={3} className={classes.list}>
-                {places.map((place, i) => (
+                {places?.map((place: any, i: React.Key | null | undefined) => (
                     <Grid item key={i} xs={12} >
-                        <Place place={place} />
-                        <Place place={place} />
                         <Place place={place} />
                     </Grid>
                 ))}

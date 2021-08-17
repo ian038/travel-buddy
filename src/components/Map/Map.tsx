@@ -6,19 +6,25 @@ import Rating from '@material-ui/lab/Rating';
 
 import useStyles from './styles';
 
-type Coordinates = {
+export type Coordinates = {
     lat: number,
     lng: number
 }
 
-const Map: React.FC = () => {
+export type Bounds = {
+    ne: Coordinates,
+    sw: Coordinates
+}
+
+type MapProps = {
+    setCoordinates: React.Dispatch<React.SetStateAction<Coordinates>>
+    setBounds: React.Dispatch<React.SetStateAction<Bounds | any>>
+    coordinates: Coordinates
+}
+
+const Map: React.FC<MapProps> = ({ setCoordinates, setBounds, coordinates }) => {
     const classes = useStyles()
     const isMobile = useMediaQuery('(min-width: 600px)')
-
-    const coordinates: Coordinates = {
-        lat: 0,
-        lng: 0
-    }
 
     const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY
 
@@ -30,6 +36,10 @@ const Map: React.FC = () => {
                 center={coordinates}
                 defaultZoom={14}
                 margin={[50, 50, 50, 50]}
+                onChange={e => {
+                    setCoordinates({ lat: e.center.lat, lng: e.center.lng })
+                    setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw })
+                }}
             >
 
             </GoogleMapReact>

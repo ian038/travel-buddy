@@ -1,9 +1,10 @@
 import React from 'react'
 
 type PlaceProps = {
-    place: {
-        name: string
-    }
+    // place: {
+    //     name: string
+    // }
+    place: any
 }
 
 const Place: React.FC<PlaceProps> = ({ place }) => {
