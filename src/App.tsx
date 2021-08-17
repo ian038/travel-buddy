@@ -15,6 +15,8 @@ const App: React.FC = () => {
   const [places, setPlaces] = useState<any>([])
   const [coordinates, setCoordinates] = useState<Coordinates | any>({})
   const [bounds, setBounds] = useState<Bounds>(initialBounds)
+  const [childClicked, setChildClicked] = useState<number>(0)
+  const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(({ coords: { latitude, longitude } }) => {
@@ -23,11 +25,14 @@ const App: React.FC = () => {
   }, [])
 
   useEffect(() => {
+    setLoading(true)
     getPlacesData(bounds.sw, bounds.ne).then(data => {
-      console.log(data)
       setPlaces(data)
+      setLoading(false)
     })
   }, [coordinates, bounds])
+
+  console.log(places)
 
   return (
     <>
@@ -37,6 +42,8 @@ const App: React.FC = () => {
         <Grid item xs={12} md={4}>
           <List
             places={places}
+            childClicked={childClicked}
+            loading={loading}
           />
         </Grid>
         <Grid item xs={12} md={8} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -45,6 +52,7 @@ const App: React.FC = () => {
             setBounds={setBounds}
             coordinates={coordinates}
             places={places}
+            setChildClicked={setChildClicked}
           />
         </Grid>
       </Grid>

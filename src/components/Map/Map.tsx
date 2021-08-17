@@ -29,9 +29,10 @@ type MapProps = {
     setBounds: React.Dispatch<React.SetStateAction<Bounds | any>>
     coordinates: Coordinates
     places: any
+    setChildClicked: React.Dispatch<React.SetStateAction<any>>
 }
 
-const Map: React.FC<MapProps> = ({ setCoordinates, setBounds, coordinates, places }) => {
+const Map: React.FC<MapProps> = ({ setCoordinates, setBounds, coordinates, places, setChildClicked }) => {
     const classes = useStyles()
     const isDesktop = useMediaQuery('(min-width: 600px)')
 
@@ -47,6 +48,7 @@ const Map: React.FC<MapProps> = ({ setCoordinates, setBounds, coordinates, place
                     setCoordinates({ lat: e.center.lat, lng: e.center.lng })
                     setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw })
                 }}
+                onChildClick={child => setChildClicked(child)}
             >
                 {places.length && places.map((place: any, i: React.Key) => (
                     <div className={classes.markerContainer} lat={Number(place.latitude)} lng={Number(place.longitude)} key={i}>

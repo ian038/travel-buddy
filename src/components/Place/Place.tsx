@@ -8,10 +8,16 @@ import useStyles from './styles';
 
 type PlaceProps = {
     place: any
+    selected: boolean
+    refProp: any
 }
 
-const Place: React.FC<PlaceProps> = ({ place }) => {
+const Place: React.FC<PlaceProps> = ({ place, selected, refProp }) => {
     const classes = useStyles()
+
+    console.log('Selected', selected)
+
+    if (selected) refProp?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 
     return (
         <Card elevation={6}>
