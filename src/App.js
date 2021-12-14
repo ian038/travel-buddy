@@ -5,24 +5,18 @@ import List from './components/List/List'
 import Map from './components/Map/Map'
 import { getPlacesData, getWeatherData } from './api';
 
-const initialBounds = {
-  ne: { lat: 0, lng: 0 },
-  sw: { lat: 0, lng: 0 }
-}
-
 const App = () => {
-  const [type, setType] = useState('restaurants')
+  const [type, setType] = useState('attractions')
   const [rating, setRating] = useState('')
   const [places, setPlaces] = useState([])
   const [coords, setCoords] = useState({});
-  const [bounds, setBounds] = useState(initialBounds)
+  const [bounds, setBounds] = useState(null)
   const [childClicked, setChildClicked] = useState(0)
   const [loading, setLoading] = useState(false)
 
   const [weatherData, setWeatherData] = useState([])
   const [filteredPlaces, setFilteredPlaces] = useState([])
   const [autocomplete, setAutocomplete] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(({ coords: { latitude, longitude } }) => {
@@ -38,22 +32,22 @@ const App = () => {
 
   useEffect(() => {
     if (bounds) {
-      setIsLoading(true);
+      setLoading(true)
 
       getWeatherData(coords.lat, coords.lng)
-        .then((data) => setWeatherData(data));
+        .then((data) => setWeatherData(data))
 
       getPlacesData(type, bounds.sw, bounds.ne)
         .then((data) => {
-          setPlaces(data.filter((place) => place.name && place.num_reviews > 0));
-          setFilteredPlaces([]);
-          setRating('');
-          setIsLoading(false);
-        });
+          setPlaces(data?.filter((place) => place.name && place.num_reviews > 0))
+          setFilteredPlaces([])
+          setRating('')
+          setLoading(false)
+        })
     }
   }, [bounds, type])
 
-  const onLoad = (autoC) => setAutocomplete(autoC)
+  const onLoad = autoC => setAutocomplete(autoC)
 
   const onPlaceChanged = () => {
     const lat = autocomplete.getPlace().geometry.location.lat()
@@ -80,11 +74,12 @@ const App = () => {
         </Grid>
         <Grid item xs={12} md={8} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Map
-            setCoordinates={setCoords}
+            setCoords={setCoords}
             setBounds={setBounds}
-            coordinates={coords}
-            places={places}
+            coords={coords}
+            places={filteredPlaces.length ? filteredPlaces : places}
             setChildClicked={setChildClicked}
+            weatherData={weatherData}
           />
         </Grid>
       </Grid>
