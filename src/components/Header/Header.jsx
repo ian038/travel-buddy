@@ -5,7 +5,7 @@ import SearchIcon from '@material-ui/icons/Search';
 
 import useStyles from './styles';
 
-const Header: React.FC = () => {
+const Header = ({ onPlaceChanged, onLoad }) => {
     const classes = useStyles();
 
     return (

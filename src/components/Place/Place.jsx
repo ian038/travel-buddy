@@ -6,16 +6,8 @@ import Rating from '@material-ui/lab/Rating';
 
 import useStyles from './styles';
 
-type PlaceProps = {
-    place: any
-    selected: boolean
-    refProp: any
-}
-
-const Place: React.FC<PlaceProps> = ({ place, selected, refProp }) => {
+const Place = ({ place, selected, refProp }) => {
     const classes = useStyles()
-
-    console.log('Selected', selected)
 
     if (selected) refProp?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 
@@ -40,14 +32,14 @@ const Place: React.FC<PlaceProps> = ({ place, selected, refProp }) => {
                     <Typography variant='subtitle1'>Ranking</Typography>
                     <Typography variant='subtitle1' gutterBottom>{place.ranking}</Typography>
                 </Box>
-                {place?.awards?.map((award: { images: { small: string | undefined; }; display_name: string | undefined; }) => (
+                {place?.awards?.map(award => (
                     <Box my={1} display='flex' justifyContent='space-between'>
                         <img src={award.images.small} alt={award.display_name} />
                         <Typography variant='subtitle2' color='textSecondary'>{award.display_name}</Typography>
                     </Box>
                 ))}
-                {place?.cuisine?.map((cuisine: { name: {} | null | undefined; }, i: React.Key) => (
-                    <Chip key={i} size='small' label={cuisine.name} className={classes.chip} />
+                {place?.cuisine?.map(({ name }) => (
+                    <Chip key={name} size='small' label={name} className={classes.chip} />
                 ))}
                 {place?.address && (
                     <Typography gutterBottom variant='subtitle2' color='textSecondary' className={classes.subtitle}>

@@ -3,22 +3,12 @@ import { CircularProgress, Grid, Typography, InputLabel, MenuItem, FormControl, 
 import Place from '../Place/Place'
 import useStyles from './styles';
 
-type PlacesProps = {
-    childClicked: number
-    places: any
-    loading: boolean
-}
-
-const List: React.FC<PlacesProps> = ({ childClicked, places, loading }) => {
+const List = ({  type, setType, rating, setRating, childClicked, places, loading }) => {
     const classes = useStyles()
-    const [type, setType] = useState<string | unknown>('attractions')
-    const [rating, setRating] = useState<number | unknown>(0)
-    const [elRefs, setElRefs] = useState<any>([])
+    const [elRefs, setElRefs] = useState([])
 
     useEffect(() => {
-        const refs: any = Array(places?.length).fill(undefined).map((_, i) => elRefs[i] || createRef())
-        console.log(refs)
-        setElRefs(refs)
+        setElRefs((refs) => Array(places.length).fill().map((_, i) => refs[i] || createRef()))
     }, [places])
 
     return (
@@ -48,11 +38,11 @@ const List: React.FC<PlacesProps> = ({ childClicked, places, loading }) => {
                         </Select>
                     </FormControl>
                     <Grid container spacing={3} className={classes.list}>
-                        {places?.map((place: any, i: React.Key) => (
-                            <Grid item key={i} xs={12} >
+                        {places?.map((place, i) => (
+                            <Grid ref={elRefs[i]} item key={i} xs={12} >
                                 <Place
                                     place={place}
-                                    selected={childClicked === i}
+                                    selected={Number(childClicked) === i}
                                     refProp={elRefs[i]}
                                 />
                             </Grid>

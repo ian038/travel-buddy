@@ -4,53 +4,29 @@ import { Paper, Typography, useMediaQuery } from '@material-ui/core';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import Rating from '@material-ui/lab/Rating';
 
+import mapStyles from '../../mapStyles'
 import useStyles from './styles';
 
-declare module 'react' {
-    interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
-        // extends React's HTMLAttributes
-        lat?: number | any;
-        lng?: number | any
-    }
-}
-
-export type Coordinates = {
-    lat: number
-    lng: number
-}
-
-export type Bounds = {
-    ne: Coordinates
-    sw: Coordinates
-}
-
-type MapProps = {
-    setCoordinates: React.Dispatch<React.SetStateAction<Coordinates>>
-    setBounds: React.Dispatch<React.SetStateAction<Bounds | any>>
-    coordinates: Coordinates
-    places: any
-    setChildClicked: React.Dispatch<React.SetStateAction<any>>
-}
-
-const Map: React.FC<MapProps> = ({ setCoordinates, setBounds, coordinates, places, setChildClicked }) => {
+const Map = ({ setCoords, setBounds, coords, places, setChildClicked, weatherData }) => {
     const classes = useStyles()
     const isDesktop = useMediaQuery('(min-width: 600px)')
 
     return (
         <div className={classes.mapContainer}>
             <GoogleMapReact
-                bootstrapURLKeys={{ key: (process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string) }}
-                defaultCenter={coordinates}
-                center={coordinates}
+                bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY }}
+                defaultCenter={coords}
+                center={coords}
                 defaultZoom={14}
                 margin={[50, 50, 50, 50]}
+                options={{ disableDefaultUI: true, zoomControl: true, styles: mapStyles }}
                 onChange={e => {
-                    setCoordinates({ lat: e.center.lat, lng: e.center.lng })
+                    setCoords({ lat: e.center.lat, lng: e.center.lng })
                     setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw })
                 }}
                 onChildClick={child => setChildClicked(child)}
             >
-                {places.length && places.map((place: any, i: React.Key) => (
+                {places.length && places.map((place, i) => (
                     <div className={classes.markerContainer} lat={Number(place.latitude)} lng={Number(place.longitude)} key={i}>
                         {!isDesktop ? (
                             <LocationOnOutlinedIcon color='primary' fontSize='large' />
@@ -61,7 +37,7 @@ const Map: React.FC<MapProps> = ({ setCoordinates, setBounds, coordinates, place
                                     src={place.photo ? place.photo.images.large.url : 'https://www.foodserviceandhospitality.com/wp-content/uploads/2016/09/Restaurant-Placeholder-001.jpg'}
                                     alt={place.name}
                                 />
-                                <Rating size='small' value={Number(place.rating)} readOnly />
+                                <Rating name='read-only' size='small' value={Number(place.rating)} readOnly />
                             </Paper>
                         )}
                     </div>
