@@ -3,7 +3,7 @@ import { CssBaseline, Grid } from '@material-ui/core'
 import Header from './components/Header/Header'
 import List from './components/List/List'
 import Map from './components/Map/Map'
-import { getPlacesData } from './api';
+import { getPlacesData, getWeatherData } from './api';
 
 const initialBounds = {
   ne: { lat: 0, lng: 0 },
@@ -31,12 +31,27 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    setLoading(true)
-    getPlacesData(bounds.sw, bounds.ne).then(data => {
-      setPlaces(data)
-      setLoading(false)
-    })
-  }, [bounds])
+    const filtered = places.filter((place) => Number(place.rating) > rating)
+
+    setFilteredPlaces(filtered)
+  }, [rating])
+
+  useEffect(() => {
+    if (bounds) {
+      setIsLoading(true);
+
+      getWeatherData(coords.lat, coords.lng)
+        .then((data) => setWeatherData(data));
+
+      getPlacesData(type, bounds.sw, bounds.ne)
+        .then((data) => {
+          setPlaces(data.filter((place) => place.name && place.num_reviews > 0));
+          setFilteredPlaces([]);
+          setRating('');
+          setIsLoading(false);
+        });
+    }
+  }, [bounds, type])
 
   const onLoad = (autoC) => setAutocomplete(autoC)
 
